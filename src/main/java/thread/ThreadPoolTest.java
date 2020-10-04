@@ -112,9 +112,12 @@ class MyRecursiveAction extends RecursiveAction{
  * 可拆分，可合并
  */
 class MyRecursiveTask extends  RecursiveTask<Long> {
-	private Logger logger = LoggerFactory.getLogger(MyRecursiveTask.class);
+	/**
+	 * 将日志序列化
+	 */
+	private final AtomicReference<Logger> logger = new AtomicReference<>(LoggerFactory.getLogger(MyRecursiveTask.class));
 
-	private long workLoad = 0;
+	private long workLoad;
 
 	public MyRecursiveTask(long workLoad){
 		this.workLoad = workLoad;
@@ -124,7 +127,7 @@ class MyRecursiveTask extends  RecursiveTask<Long> {
 	protected Long compute() {
 		int threshold = 16;
 		if (this.workLoad > threshold){
-			logger.info("Splitting workLoad:{}", this.workLoad);
+			logger.get().info("Splitting workLoad:{}", this.workLoad);
 			ArrayList<MyRecursiveTask> subtasks = new ArrayList<>(createSubtasks());
 			subtasks.forEach(ForkJoinTask::fork);
 
@@ -134,7 +137,7 @@ class MyRecursiveTask extends  RecursiveTask<Long> {
 			}
 			return result;
 		}else {
-			logger.info("Doing workLoad myself:{}", this.workLoad);
+			logger.get().info("Doing workLoad myself:{}", this.workLoad);
 			return workLoad * 3;
 		}
 	}
