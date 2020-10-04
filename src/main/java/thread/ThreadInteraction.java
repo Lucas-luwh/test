@@ -3,6 +3,8 @@ package thread;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.concurrent.ExecutorService;
+
 /**
  * @author julin
  */
@@ -12,13 +14,11 @@ public class ThreadInteraction {
 		final Bussiness bussiness = new Bussiness();
 
 		//子线程
-		new Thread(() -> {
-			for(int i = 0; i < 3; i++){
-				bussiness.subMethod();
-			}
-		}).start();
+		ExecutorService executorService = ThreadPoolTest.creatThreadPool(1, 3, 100);
+		executorService.execute(bussiness::subMethod);
 		//主线程
-		for (int i = 0; i < 3; i++){
+		int mainThreadSize = 3;
+		for (int i = 0; i < mainThreadSize; i++){
 			bussiness.mainMethod();
 		}
 	}
