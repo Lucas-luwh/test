@@ -4,11 +4,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import util.GenerateRandomUtil;
 
+import java.util.concurrent.ExecutorService;
+
 /**
  * ThreadLocal练习
  * @author julin
  */
-public class ThreadLocalTest implements Runnable{
+public class ThreadLocalTest {
 
 	/**
 	 * 序列号
@@ -35,34 +37,30 @@ public class ThreadLocalTest implements Runnable{
 	public static void main(String[] args) {
 		Integer a = ThreadLocalTest.SERIAL_NUM.get();
 		logger.info("当前线程序列号是：{}", a);
-		ThreadLocalTest threadLocalTest = new ThreadLocalTest();
-		Thread t1 = new Thread(threadLocalTest, "Thread A");
-		Thread t2 = new Thread(threadLocalTest,"Thread B");
-		t1.start();
-		t2.start();
+		ExecutorService executorService = ThreadPoolTest.creatThreadPool(1, 2, 100);
+		executorService.execute(() -> {
+			String currentThreadName = Thread.currentThread().getName();
+			logger.info( "{} is running...",currentThreadName);
+			int age = GenerateRandomUtil.generateRandomNextInt(0, 100);
+			logger.info("{} is set age: {}",currentThreadName,age);
+			//每个线程对应一个studen对象
+			Studen studen = getStudent();
+			studen.setAge(age);
+			logger.info("{} is first get age : {}",currentThreadName,age);
+			try {
+				Thread.sleep(500);
+			} catch (InterruptedException e) {
+				logger.error("线程异常：{}",e.getMessage());
+			}
+			logger.info("{} is second get age :{}",currentThreadName,studen.getAge());
+		});
+
 		//线程执行结束，释放内存
 		ThreadLocalTest.remove();
 	}
 
-	@Override
-	public void run() {
-		String currentThreadName = Thread.currentThread().getName();
-		logger.info( "{} is running...",currentThreadName);
-		int age = GenerateRandomUtil.generateRandomNextInt(0, 100);
-		logger.info("{} is set age: {}",currentThreadName,age);
-		//每个线程对应一个studen对象
-		Studen studen = getStudent();
-		studen.setAge(age);
-		logger.info("{} is first get age : {}",currentThreadName,age);
-		try {
-			Thread.sleep(500);
-		} catch (InterruptedException e) {
-			logger.error("线程异常：{}",e.getMessage());
-		}
-		logger.info("{} is second get age :{}",currentThreadName,studen.getAge());
-	}
 
-	private Studen getStudent(){
+	private static Studen getStudent(){
 		Studen studen = studenThreadLocal.get();
 		if (null == studen){
 			studen = new Studen();
