@@ -10,6 +10,9 @@ import java.util.concurrent.SynchronousQueue;
 
 /**
  * 同步队列
+ * 公平模式下 使用TransferQueue队列  head 和 tail 指针
+ * 公平模式下 使用TransferStack
+ *
  * @author julin
  */
 public class SynchronousQueueTest {
