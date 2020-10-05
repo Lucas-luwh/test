@@ -10,6 +10,8 @@ import java.util.concurrent.DelayQueue;
 import java.util.concurrent.ExecutorService;
 
 /**
+ * 缓存
+ *
  * @author julin
  */
 public class Cache<K, V> {
