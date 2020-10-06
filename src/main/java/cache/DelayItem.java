@@ -1,8 +1,5 @@
 package cache;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.util.concurrent.Delayed;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
@@ -11,8 +8,6 @@ import java.util.concurrent.atomic.AtomicLong;
  * @author julin
  */
 public class DelayItem<T> implements Delayed {
-
-	private Logger logger = LoggerFactory.getLogger(DelayItem.class);
 
 	/**
 	 * 虚拟机当前高精度时间值，以纳秒为单位
