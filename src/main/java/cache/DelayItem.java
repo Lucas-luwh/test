@@ -14,7 +14,7 @@ public class DelayItem<T> implements Delayed {
 	 */
 	private static final long NANO_ORIGIN = System.nanoTime();
 
-	private static final AtomicLong sequencer = new AtomicLong(0);
+	private static final AtomicLong SEQUENCER = new AtomicLong(0);
 	/**
 	 * 中断队列的序列号
 	 */
@@ -28,14 +28,14 @@ public class DelayItem<T> implements Delayed {
 	public DelayItem(T submit, long timeout) {
 		this.time = now() + timeout;
 		this.item = submit;
-		this.sequenceNumber = sequencer.getAndIncrement();
+		this.sequenceNumber = SEQUENCER.getAndIncrement();
 	}
 
 	public T getItem() {
 		return this.item;
 	}
 
-	final static long now() {
+	static long now() {
 		return System.nanoTime() - NANO_ORIGIN;
 	}
 
@@ -63,6 +63,9 @@ public class DelayItem<T> implements Delayed {
 			}
 		}
 		long l = getDelay(TimeUnit.NANOSECONDS) - other.getDelay(TimeUnit.NANOSECONDS);
-		return (l == 0) ? 0 : ((l < 0) ? -1 : 1);
+		if (l == 0) {
+			return 0;
+		}
+		return (l < 0) ? -1 : 1;
 	}
 }
