@@ -1,7 +1,12 @@
-# test
+# Demo练习
 #集合练习：
-    hashmap，list
+    1：hashmap
+    2：list
 #数据结构：
-   阻塞队列，堆栈，同步队列
+   1：阻塞队列
+   2：堆栈
+   3：同步队列
 #线程
    线程池
+#DelayQueue
+  缓存练习
