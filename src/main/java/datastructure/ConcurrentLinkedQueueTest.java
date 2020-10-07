@@ -3,6 +3,7 @@ package datastructure;
 import thread.ThreadPoolTest;
 import util.GenerateRandomUtil;
 
+import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ExecutorService;
 
@@ -15,8 +16,8 @@ import java.util.concurrent.ExecutorService;
  */
 public class ConcurrentLinkedQueueTest {
 
-	public static int threadCount = 10;
-	public static ConcurrentLinkedQueue<String> queue = new ConcurrentLinkedQueue<>();
+	public static final int THREADCOUNT = 10;
+	protected static Queue<String> queue = new ConcurrentLinkedQueue<>();
 
 	static class Offer implements Runnable {
 
@@ -52,7 +53,7 @@ public class ConcurrentLinkedQueueTest {
 
 	public static void main(String[] args) {
 		ExecutorService executorService = ThreadPoolTest.creatThreadPool(10, 50, 100);
-		for (int x = 0; x < threadCount; x++) {
+		for (int x = 0; x < THREADCOUNT; x++) {
 			executorService.submit(new Offer());
 			executorService.submit(new Poll());
 		}
